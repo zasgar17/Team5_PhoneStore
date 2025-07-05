@@ -26,7 +26,16 @@ public class PhoneManager {
             System.out.println("No phones available.");
             return;
         }
-        for (Phone p : phones) System.out.println(p);
+
+        System.out.printf("%-6s %-15s %-15s %-12s %-12s %-15s %-20s %-15s\n",
+    "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
+System.out.println("------------------------------------------------------------------------------------------------------------");
+
+for (Phone p : phones) {
+    System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
+        p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
+}
+
     }
 
     public static void editPhone(Scanner sc, Phone p) {
@@ -61,7 +70,8 @@ public class PhoneManager {
             default -> 0;
         });
 
-        System.out.println("Sorted!");
+        System.out.println("Sorted by " + field + "!\n");
+        listPhones();
     }
 
     public static void filterPhones(Scanner sc) {
@@ -77,13 +87,23 @@ public class PhoneManager {
         double minPrice = minPriceStr.isEmpty() ? Double.MIN_VALUE : Double.parseDouble(minPriceStr);
         double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxPriceStr);
 
+        boolean found = false;
+
+        System.out.printf("%-4s %-10s %-10s %-8s %-10s %-10s %-15s %-15s\n",
+            "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
+        System.out.println("-------------------------------------------------------------------------------------------");
+
         for (Phone p : phones) {
             if (!brand.isEmpty() && !p.brand.equalsIgnoreCase(brand)) continue;
             if (!model.isEmpty() && !p.model.equalsIgnoreCase(model)) continue;
             if (!condition.isEmpty() && !p.condition.equalsIgnoreCase(condition)) continue;
             if (p.price < minPrice || p.price > maxPrice) continue;
 
-            System.out.println(p);
+            System.out.printf("%-4d %-10s %-10s %-8d %-10.2f %-10s %-15s %-15s\n",
+                p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
+            found = true;
         }
+
+        if (!found) System.out.println("No matching phones found.");
     }
 }
