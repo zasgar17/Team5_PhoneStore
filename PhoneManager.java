@@ -27,15 +27,23 @@ public class PhoneManager {
             return;
         }
 
+        int newCount = 0;
+        int usedCount = 0;
+
         System.out.printf("%-6s %-15s %-15s %-12s %-12s %-15s %-20s %-15s\n",
-    "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
-System.out.println("------------------------------------------------------------------------------------------------------------");
+            "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
+        System.out.println("------------------------------------------------------------------------------------------------------------");
 
-for (Phone p : phones) {
-    System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
-        p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
-}
+        for (Phone p : phones) {
+            System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
+                p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
 
+            if (p.condition.equalsIgnoreCase("new")) newCount++;
+            else if (p.condition.equalsIgnoreCase("used")) usedCount++;
+        }
+
+        System.out.println("\n>>>\tTotal phones: " + phones.size());
+        System.out.println(">>>\tNew: " + newCount + " | Used: " + usedCount);
     }
 
     public static void editPhone(Scanner sc, Phone p) {
@@ -87,11 +95,13 @@ for (Phone p : phones) {
         double minPrice = minPriceStr.isEmpty() ? Double.MIN_VALUE : Double.parseDouble(minPriceStr);
         double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxPriceStr);
 
-        boolean found = false;
+        int count = 0;
+        int newCount = 0;
+        int usedCount = 0;
 
-        System.out.printf("%-4s %-10s %-10s %-8s %-10s %-10s %-15s %-15s\n",
+        System.out.printf("%-6s %-15s %-15s %-12s %-12s %-15s %-20s %-15s\n",
             "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
-        System.out.println("-------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------------");
 
         for (Phone p : phones) {
             if (!brand.isEmpty() && !p.brand.equalsIgnoreCase(brand)) continue;
@@ -99,11 +109,19 @@ for (Phone p : phones) {
             if (!condition.isEmpty() && !p.condition.equalsIgnoreCase(condition)) continue;
             if (p.price < minPrice || p.price > maxPrice) continue;
 
-            System.out.printf("%-4d %-10s %-10s %-8d %-10.2f %-10s %-15s %-15s\n",
+            System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
                 p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
-            found = true;
+            count++;
+
+            if (p.condition.equalsIgnoreCase("new")) newCount++;
+            else if (p.condition.equalsIgnoreCase("used")) usedCount++;
         }
 
-        if (!found) System.out.println("No matching phones found.");
+        if (count == 0) {
+            System.out.println("No matching phones found.");
+        } else {
+            System.out.println("\nFiltered phones: " + count);
+            System.out.println("New: " + newCount + " | Used: " + usedCount);
+        }
     }
 }
