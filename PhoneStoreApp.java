@@ -4,7 +4,8 @@ public class PhoneStoreApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         PhoneFileService.loadFromFile();
-
+        //edit ucun error handling yaz
+        //sort ucun acsending decsending 
         while (true) {
             System.out.println("\n========================================================");
             System.out.println("\t\tWelcome to PhonetiCode");

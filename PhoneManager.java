@@ -47,81 +47,136 @@ public class PhoneManager {
     }
 
     public static void editPhone(Scanner sc, Phone p) {
-        System.out.print("New Brand [" + p.brand + "]: "); String brand = sc.nextLine();
-        System.out.print("New Model [" + p.model + "]: "); String model = sc.nextLine();
-        System.out.print("New Storage [" + p.storage + "]: "); String storage = sc.nextLine();
-        System.out.print("New Price [" + p.price + "]: "); String price = sc.nextLine();
-        System.out.print("New Condition [" + p.condition + "]: "); String condition = sc.nextLine();
-        System.out.print("New Seller Name [" + p.seller.name + "]: "); String sname = sc.nextLine();
-        System.out.print("New Seller Phone [" + p.seller.phone + "]: "); String sphone = sc.nextLine();
+    System.out.print("New Brand [" + p.brand + "]: ");
+    String brand = sc.nextLine();
+    if (!brand.isEmpty()) p.brand = brand;
 
-        if (!brand.isEmpty()) p.brand = brand;
-        if (!model.isEmpty()) p.model = model;
-        if (!storage.isEmpty()) p.storage = Integer.parseInt(storage);
-        if (!price.isEmpty()) p.price = Double.parseDouble(price);
-        if (!condition.isEmpty()) p.condition = condition;
-        if (!sname.isEmpty()) p.seller.name = sname;
-        if (!sphone.isEmpty()) p.seller.phone = sphone;
+    System.out.print("New Model [" + p.model + "]: ");
+    String model = sc.nextLine();
+    if (!model.isEmpty()) p.model = model;
 
-        System.out.println("Phone updated.");
+    while (true) {
+        System.out.print("New Storage [" + p.storage + "]: ");
+        String storage = sc.nextLine();
+        if (storage.isEmpty()) break;
+        try {
+            p.storage = Integer.parseInt(storage);
+            break;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number. Try again.");
+        }
     }
+
+    while (true) {
+        System.out.print("New Price [" + p.price + "]: ");
+        String price = sc.nextLine();
+        if (price.isEmpty()) break;
+        try {
+            p.price = Double.parseDouble(price);
+            break;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number. Try again.");
+        }
+    }
+
+    System.out.print("New Condition [" + p.condition + "]: ");
+    String condition = sc.nextLine();
+    if (!condition.isEmpty()) p.condition = condition;
+
+    System.out.print("New Seller Name [" + p.seller.name + "]: ");
+    String sname = sc.nextLine();
+    if (!sname.isEmpty()) p.seller.name = sname;
+
+    System.out.print("New Seller Phone [" + p.seller.phone + "]: ");
+    String sphone = sc.nextLine();
+    if (!sphone.isEmpty()) p.seller.phone = sphone;
+
+    System.out.println("Phone updated.");
+}
+
 
     public static void sortPhones(Scanner sc) {
-        System.out.print("Sort by (brand/model/price/storage): ");
-        String field = sc.nextLine().toLowerCase();
+    System.out.print("Sort by (id/brand/model/price/storage/condition/seller): ");
+    String field = sc.nextLine().toLowerCase();
 
-        phones.sort((p1, p2) -> switch (field) {
-            case "brand" -> p1.brand.compareToIgnoreCase(p2.brand);
-            case "model" -> p1.model.compareToIgnoreCase(p2.model);
-            case "price" -> Double.compare(p1.price, p2.price);
-            case "storage" -> Integer.compare(p1.storage, p2.storage);
-            default -> 0;
-        });
+    System.out.print("Order (asc/desc): ");
+    String order = sc.nextLine().toLowerCase();
+    boolean ascending = order.equals("asc");
 
-        System.out.println("Sorted by " + field + "!\n");
-        listPhones();
+    Comparator<Phone> comparator = switch (field) {
+        case "id" -> Comparator.comparingInt(p -> p.id);
+        case "brand" -> Comparator.comparing(p -> p.brand.toLowerCase());
+        case "model" -> Comparator.comparing(p -> p.model.toLowerCase());
+        case "price" -> Comparator.comparingDouble(p -> p.price);
+        case "storage" -> Comparator.comparingInt(p -> p.storage);
+        case "condition" -> Comparator.comparing(p -> p.condition.toLowerCase());
+        case "seller" -> Comparator.comparing(p -> p.seller.name.toLowerCase());
+        default -> null;
+    };
+
+    if (comparator == null) {
+        System.out.println("Invalid sort field.");
+        return;
     }
 
-    public static void filterPhones(Scanner sc) {
-        System.out.println("--- FILTER PHONES ---");
-        System.out.println("Leave blank to skip a field.");
+    if (!ascending) comparator = comparator.reversed();
+    phones.sort(comparator);
 
-        System.out.print("Brand: "); String brand = sc.nextLine();
-        System.out.print("Model: "); String model = sc.nextLine();
-        System.out.print("Condition (New/Used): "); String condition = sc.nextLine();
-        System.out.print("Min Price: "); String minPriceStr = sc.nextLine();
-        System.out.print("Max Price: "); String maxPriceStr = sc.nextLine();
+    System.out.println("Sorted by " + field + " (" + (ascending ? "ASC" : "DESC") + ")");
+    listPhones();
+}
 
-        double minPrice = minPriceStr.isEmpty() ? Double.MIN_VALUE : Double.parseDouble(minPriceStr);
-        double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxPriceStr);
 
-        int count = 0;
-        int newCount = 0;
-        int usedCount = 0;
+   public static void filterPhones(Scanner sc) {
+    System.out.println("--- FILTER PHONES ---");
+    System.out.println("Leave blank to skip a field.");
 
-        System.out.printf("%-6s %-15s %-15s %-12s %-12s %-15s %-20s %-15s\n",
-            "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
-        System.out.println("------------------------------------------------------------------------------------------------------------");
+    System.out.print("Brand: ");
+    String brand = sc.nextLine();
+    System.out.print("Model: ");
+    String model = sc.nextLine();
+    System.out.print("Condition (New/Used): ");
+    String condition = sc.nextLine();
+    System.out.print("Min Price: ");
+    String minPriceStr = sc.nextLine();
+    System.out.print("Max Price: ");
+    String maxPriceStr = sc.nextLine();
+    System.out.print("Storage (GB): ");
+    String storageStr = sc.nextLine();
+    System.out.print("Seller Name: ");
+    String sellerName = sc.nextLine();
 
-        for (Phone p : phones) {
-            if (!brand.isEmpty() && !p.brand.equalsIgnoreCase(brand)) continue;
-            if (!model.isEmpty() && !p.model.equalsIgnoreCase(model)) continue;
-            if (!condition.isEmpty() && !p.condition.equalsIgnoreCase(condition)) continue;
-            if (p.price < minPrice || p.price > maxPrice) continue;
+    double minPrice = minPriceStr.isEmpty() ? Double.MIN_VALUE : Double.parseDouble(minPriceStr);
+    double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxPriceStr);
+    int storage = storageStr.isEmpty() ? -1 : Integer.parseInt(storageStr);
 
-            System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
-                p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
-            count++;
+    int count = 0, newCount = 0, usedCount = 0;
 
-            if (p.condition.equalsIgnoreCase("new")) newCount++;
-            else if (p.condition.equalsIgnoreCase("used")) usedCount++;
-        }
+    System.out.printf("%-6s %-15s %-15s %-12s %-12s %-15s %-20s %-15s\n",
+        "ID", "Brand", "Model", "Storage", "Price", "Condition", "Seller Name", "Seller Phone");
+    System.out.println("------------------------------------------------------------------------------------------------------------");
 
-        if (count == 0) {
-            System.out.println("No matching phones found.");
-        } else {
-            System.out.println("\nFiltered phones: " + count);
-            System.out.println("New: " + newCount + " | Used: " + usedCount);
-        }
+    for (Phone p : phones) {
+        if (!brand.isEmpty() && !p.brand.equalsIgnoreCase(brand)) continue;
+        if (!model.isEmpty() && !p.model.equalsIgnoreCase(model)) continue;
+        if (!condition.isEmpty() && !p.condition.equalsIgnoreCase(condition)) continue;
+        if (p.price < minPrice || p.price > maxPrice) continue;
+        if (storage != -1 && p.storage != storage) continue;
+        if (!sellerName.isEmpty() && !p.seller.name.equalsIgnoreCase(sellerName)) continue;
+
+        System.out.printf("%-6d %-15s %-15s %-12d %-12.2f %-15s %-20s %-15s\n",
+            p.id, p.brand, p.model, p.storage, p.price, p.condition, p.seller.name, p.seller.phone);
+
+        count++;
+        if (p.condition.equalsIgnoreCase("new")) newCount++;
+        else if (p.condition.equalsIgnoreCase("used")) usedCount++;
     }
+
+    if (count == 0) {
+        System.out.println("No matching phones found.");
+    } else {
+        System.out.println("\nFiltered phones: " + count);
+        System.out.println("New: " + newCount + " | Used: " + usedCount);
+    }
+}
 }
