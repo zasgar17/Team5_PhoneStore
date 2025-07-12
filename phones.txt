@@ -1,12 +1,14 @@
-7;Xiaomi;Redmi Note 11;64;199.99;New;Rashad_Mehdiyev;0505556677
 9;Apple;iPhone SE;64;299.99;Used;Narmin_Hasanli;0519988776
-6;Samsung;Galaxy A53;128;350.75;New;Farid_Suleymanov;0511112233
-10;Google;Pixel 6a;128;399.5;New;Elvin_Imanov;0509998887
 3;Xiaomi;Mi 11;128;450.0;Used;Nijat_Guliyev;0508765432
 5;Apple;iPhone 12;64;599.99;Used;Aysel_Abbasova;0502223344
 8;OnePlus;9 Pro;256;699.0;Used;Javid_Sadiqov;0553334445
+13;Google;Pixel 7a;128;500.0;Used;Ziya_Hasanov;0996332121
+7;Xiaomi;Redmi Note 11;64;199.99;New;Rashad_Mehdiyev;0505556677
+6;Samsung;Galaxy A53;128;350.75;New;Farid_Suleymanov;0511112233
+10;Google;Pixel 6a;128;399.5;New;Elvin_Imanov;0509998887
 4;Google;Pixel 7;128;720.25;New;Kamran_Aliyev;0559876543
 2;Samsung;Galaxy S22;256;799.5;New;Leyla_Mammadova;0512345678
 1;Apple;iPhone 14;128;999.99;New;Ali_Huseynov;0501234567
 11;Apple;Iphone13 Pro;512;1600.0;new;Nuriya_Allahverdiyeva;0557799591
 12;Samsung;Galaxy S24;256;1450.0;New;Nihad_Xanbabayev;0518834562
+14;Google;Pixel ;256;700.0;New;Faiq_Babazade;0704456782
