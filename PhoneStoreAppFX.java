@@ -1,7 +1,11 @@
-// === New File: PhoneStoreAppFX.java ===
 import javafx.application.Application;
-import javafx.collections.*;
-import javafx.geometry.*;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +18,7 @@ public class PhoneStoreAppFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // Load data first
         PhoneFileService.loadFromFile();
         data = FXCollections.observableArrayList(PhoneManager.phones);
 
@@ -21,29 +26,27 @@ public class PhoneStoreAppFX extends Application {
 
         // === Table columns ===
         TableColumn<Phone, Integer> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().id).asObject());
 
         TableColumn<Phone, String> brandCol = new TableColumn<>("Brand");
-        brandCol.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        brandCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().brand));
 
         TableColumn<Phone, String> modelCol = new TableColumn<>("Model");
-        modelCol.setCellValueFactory(new PropertyValueFactory<>("model"));
+        modelCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().model));
 
-        TableColumn<Phone, Integer> storageCol = new TableColumn<>("Storage");
-        storageCol.setCellValueFactory(new PropertyValueFactory<>("storage"));
+        TableColumn<Phone, Integer> storageCol = new TableColumn<>("Storage (GB)");
+        storageCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().storage).asObject());
 
         TableColumn<Phone, Double> priceCol = new TableColumn<>("Price");
-        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        priceCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().price).asObject());
 
         TableColumn<Phone, String> conditionCol = new TableColumn<>("Condition");
-        conditionCol.setCellValueFactory(new PropertyValueFactory<>("condition"));
+        conditionCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().condition));
 
         TableColumn<Phone, String> sellerCol = new TableColumn<>("Seller");
-        sellerCol.setCellValueFactory(cellData -> {
-            Seller seller = cellData.getValue().seller;
-            return javafx.beans.property.SimpleStringProperty.stringExpression(
-                javafx.beans.binding.Bindings.createStringBinding(() -> seller.toString()));
-        });
+        sellerCol.setCellValueFactory(cellData -> new SimpleStringProperty(
+            cellData.getValue().seller.name + " (" + cellData.getValue().seller.phone + ")"
+        ));
 
         // === Actions column ===
         TableColumn<Phone, Void> actionCol = new TableColumn<>("Actions");
@@ -59,11 +62,13 @@ public class PhoneStoreAppFX extends Application {
                     Phone p = getTableView().getItems().get(getIndex());
                     PhoneManager.phones.remove(p);
                     data.remove(p);
+                    table.refresh();
                 });
                 HBox pane = new HBox(5, editBtn, deleteBtn);
                 pane.setAlignment(Pos.CENTER);
                 setGraphic(pane);
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -75,14 +80,29 @@ public class PhoneStoreAppFX extends Application {
         table.setItems(data);
 
         // === Add form ===
-        TextField idField = new TextField(); idField.setPromptText("ID");
-        TextField brandField = new TextField(); brandField.setPromptText("Brand");
-        TextField modelField = new TextField(); modelField.setPromptText("Model");
-        TextField storageField = new TextField(); storageField.setPromptText("Storage");
-        TextField priceField = new TextField(); priceField.setPromptText("Price");
-        TextField conditionField = new TextField(); conditionField.setPromptText("Condition");
-        TextField sellerNameField = new TextField(); sellerNameField.setPromptText("Seller Name");
-        TextField sellerPhoneField = new TextField(); sellerPhoneField.setPromptText("Seller Phone");
+        TextField idField = new TextField();
+        idField.setPromptText("ID");
+        
+        TextField brandField = new TextField();
+        brandField.setPromptText("Brand");
+        
+        TextField modelField = new TextField();
+        modelField.setPromptText("Model");
+        
+        TextField storageField = new TextField();
+        storageField.setPromptText("Storage (GB)");
+        
+        TextField priceField = new TextField();
+        priceField.setPromptText("Price");
+        
+        TextField conditionField = new TextField();
+        conditionField.setPromptText("New/Used");
+        
+        TextField sellerNameField = new TextField();
+        sellerNameField.setPromptText("Seller Name");
+        
+        TextField sellerPhoneField = new TextField();
+        sellerPhoneField.setPromptText("Seller Phone");
 
         Button addBtn = new Button("Add Phone");
         addBtn.setOnAction(e -> {
@@ -96,23 +116,50 @@ public class PhoneStoreAppFX extends Application {
                 String sellerName = sellerNameField.getText();
                 String sellerPhone = sellerPhoneField.getText();
 
-                Phone newPhone = new Phone(id, brand, model, storage, price, condition, new Seller(sellerName, sellerPhone));
+                if (brand.isEmpty() || model.isEmpty() || condition.isEmpty() || 
+                    sellerName.isEmpty() || sellerPhone.isEmpty()) {
+                    showAlert("All fields are required!");
+                    return;
+                }
+
+                Phone newPhone = new Phone(id, brand, model, storage, price, condition, 
+                                         new Seller(sellerName, sellerPhone));
                 PhoneManager.phones.add(newPhone);
                 data.add(newPhone);
 
-                idField.clear(); brandField.clear(); modelField.clear();
-                storageField.clear(); priceField.clear(); conditionField.clear();
-                sellerNameField.clear(); sellerPhoneField.clear();
+                // Clear fields
+                idField.clear();
+                brandField.clear();
+                modelField.clear();
+                storageField.clear();
+                priceField.clear();
+                conditionField.clear();
+                sellerNameField.clear();
+                sellerPhoneField.clear();
+
+                table.refresh();
+            } catch (NumberFormatException ex) {
+                showAlert("Invalid number format! Please check ID, Storage and Price fields.");
             } catch (Exception ex) {
-                showAlert("Invalid input! Please check your fields.");
+                showAlert("Error adding phone: " + ex.getMessage());
             }
         });
 
-        Button saveBtn = new Button("Save");
-        saveBtn.setOnAction(e -> PhoneFileService.saveToFile());
+        Button saveBtn = new Button("Save Data");
+        saveBtn.setOnAction(e -> {
+            PhoneFileService.saveToFile();
+            showAlert("Data saved successfully to phones.txt");
+        });
+
+        Button refreshBtn = new Button("Refresh");
+        refreshBtn.setOnAction(e -> {
+            PhoneFileService.loadFromFile();
+            data.setAll(PhoneManager.phones);
+            table.refresh();
+        });
 
         HBox form = new HBox(5, idField, brandField, modelField, storageField,
-                priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn);
+                priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn, refreshBtn);
         form.setPadding(new Insets(10));
         form.setAlignment(Pos.CENTER);
 
@@ -140,7 +187,7 @@ public class PhoneStoreAppFX extends Application {
         grid.setHgap(5);
         grid.addRow(0, new Label("Brand:"), brandField);
         grid.addRow(1, new Label("Model:"), modelField);
-        grid.addRow(2, new Label("Storage:"), storageField);
+        grid.addRow(2, new Label("Storage (GB):"), storageField);
         grid.addRow(3, new Label("Price:"), priceField);
         grid.addRow(4, new Label("Condition:"), conditionField);
         grid.addRow(5, new Label("Seller Name:"), sellerNameField);
@@ -153,14 +200,18 @@ public class PhoneStoreAppFX extends Application {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveBtn) {
-                p.brand = brandField.getText();
-                p.model = modelField.getText();
-                p.storage = Integer.parseInt(storageField.getText());
-                p.price = Double.parseDouble(priceField.getText());
-                p.condition = conditionField.getText();
-                p.seller.name = sellerNameField.getText();
-                p.seller.phone = sellerPhoneField.getText();
-                table.refresh();
+                try {
+                    p.brand = brandField.getText();
+                    p.model = modelField.getText();
+                    p.storage = Integer.parseInt(storageField.getText());
+                    p.price = Double.parseDouble(priceField.getText());
+                    p.condition = conditionField.getText();
+                    p.seller.name = sellerNameField.getText();
+                    p.seller.phone = sellerPhoneField.getText();
+                    table.refresh();
+                } catch (NumberFormatException e) {
+                    showAlert("Invalid number format for storage or price!");
+                }
             }
             return null;
         });
@@ -169,7 +220,8 @@ public class PhoneStoreAppFX extends Application {
     }
 
     private void showAlert(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        alert.setHeaderText(null);
         alert.showAndWait();
     }
 
