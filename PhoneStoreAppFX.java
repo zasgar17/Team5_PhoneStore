@@ -17,6 +17,8 @@ public class PhoneStoreAppFX extends Application {
     private TableView<Phone> table = new TableView<>();
     private ObservableList<Phone> data;
     private FilteredList<Phone> filteredData;
+    private Label countLabel = new Label();
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -91,6 +93,24 @@ public class PhoneStoreAppFX extends Application {
         sortedData.comparatorProperty().bind(table.comparatorProperty());
         table.setItems(sortedData);
 
+        countLabel.setText("Total Phones: " + sortedData.size());
+        sortedData.addListener((javafx.collections.ListChangeListener<Phone>) change -> {
+            countLabel.setText("Total Phones: " + sortedData.size());
+        });
+
+
+        // Count label update
+        countLabel.setText("Total Phones: " + filteredData.size());
+        
+        filteredData.predicateProperty().addListener((obs, oldPred, newPred) -> 
+            countLabel.setText("Total Phones: " + filteredData.size()));
+
+        HBox tableHeader = new HBox(countLabel);
+        tableHeader.setPadding(new Insets(0, 10, 5, 10));
+        tableHeader.setAlignment(Pos.CENTER_RIGHT);
+
+
+
         // === Filter Form ===
         Label filterLabel = new Label("FILTER PHONES:");
         filterLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
@@ -151,8 +171,8 @@ public class PhoneStoreAppFX extends Application {
         Label addLabel = new Label("ADD NEW PHONE:");
         addLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-        TextField idField = new TextField();
-        idField.setPromptText("ID");
+        // TextField idField = new TextField();
+        // idField.setPromptText("ID");
 
         TextField brandField = new TextField();
         brandField.setPromptText("Brand");
@@ -178,7 +198,8 @@ public class PhoneStoreAppFX extends Application {
         Button addBtn = new Button("Add Phone");
         addBtn.setOnAction(e -> {
             try {
-                int id = Integer.parseInt(idField.getText());
+                //int id = Integer.parseInt(idField.getText());
+                int id = generateNextId();
                 String brand = brandField.getText();
                 String model = modelField.getText();
                 int storage = Integer.parseInt(storageField.getText());
@@ -200,7 +221,7 @@ public class PhoneStoreAppFX extends Application {
                 filteredData.setPredicate(filteredData.getPredicate());
                 table.refresh();
 
-                idField.clear();
+                //idField.clear();
                 brandField.clear();
                 modelField.clear();
                 storageField.clear();
@@ -227,8 +248,12 @@ public class PhoneStoreAppFX extends Application {
             table.refresh();
         });
 
-        HBox addForm = new HBox(5, idField, brandField, modelField, storageField,
-                priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn, refreshBtn);
+        // HBox addForm = new HBox(5, idField, brandField, modelField, storageField,
+        //         priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn, refreshBtn);
+        HBox addForm = new HBox(5, brandField, modelField, storageField,
+    priceField, conditionField, sellerNameField, sellerPhoneField,
+    addBtn, saveBtn, refreshBtn);
+
         addForm.setPadding(new Insets(5));
         addForm.setAlignment(Pos.CENTER);
 
@@ -238,7 +263,7 @@ public class PhoneStoreAppFX extends Application {
         VBox addSection = new VBox(5, addLabel, addForm);
         addSection.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(10, table, filterSection, addSection);
+        VBox root = new VBox(10, tableHeader, table, filterSection, addSection);
         root.setPadding(new Insets(10));
 
         primaryStage.setScene(new Scene(root, 1200, 650));
@@ -334,6 +359,14 @@ public class PhoneStoreAppFX extends Application {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+
+    private int generateNextId() {
+    return data.stream()
+               .mapToInt(phone -> phone.id)
+               .max()
+               .orElse(0) + 1;
+}
+
 
     public static void main(String[] args) {
         launch(args);
