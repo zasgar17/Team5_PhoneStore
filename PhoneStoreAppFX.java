@@ -17,6 +17,8 @@ public class PhoneStoreAppFX extends Application {
     private TableView<Phone> table = new TableView<>();
     private ObservableList<Phone> data;
     private FilteredList<Phone> filteredData;
+    private Label countLabel = new Label();
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -90,6 +92,24 @@ public class PhoneStoreAppFX extends Application {
         SortedList<Phone> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(table.comparatorProperty());
         table.setItems(sortedData);
+
+        countLabel.setText("Total Phones: " + sortedData.size());
+        sortedData.addListener((javafx.collections.ListChangeListener<Phone>) change -> {
+            countLabel.setText("Total Phones: " + sortedData.size());
+        });
+
+
+        // Count label update
+        countLabel.setText("Total Phones: " + filteredData.size());
+        
+        filteredData.predicateProperty().addListener((obs, oldPred, newPred) -> 
+            countLabel.setText("Total Phones: " + filteredData.size()));
+
+        HBox tableHeader = new HBox(countLabel);
+        tableHeader.setPadding(new Insets(0, 10, 5, 10));
+        tableHeader.setAlignment(Pos.CENTER_RIGHT);
+
+
 
         // === Filter Form ===
         Label filterLabel = new Label("FILTER PHONES:");
@@ -238,7 +258,7 @@ public class PhoneStoreAppFX extends Application {
         VBox addSection = new VBox(5, addLabel, addForm);
         addSection.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(10, table, filterSection, addSection);
+        VBox root = new VBox(10, tableHeader, table, filterSection, addSection);
         root.setPadding(new Insets(10));
 
         primaryStage.setScene(new Scene(root, 1200, 650));
