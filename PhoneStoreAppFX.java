@@ -20,14 +20,13 @@ public class PhoneStoreAppFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Load data first
         PhoneFileService.loadFromFile();
         data = FXCollections.observableArrayList(PhoneManager.phones);
         filteredData = new FilteredList<>(data, p -> true);
 
         primaryStage.setTitle("PhonetiCode - Phone Store");
 
-        // === Table columns ===
+        // === Table Columns ===
         TableColumn<Phone, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().id).asObject());
 
@@ -56,57 +55,64 @@ public class PhoneStoreAppFX extends Application {
         actionCol.setCellFactory(param -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
+            private final HBox pane = new HBox(5, editBtn, deleteBtn);
+
             {
+                pane.setAlignment(Pos.CENTER);
+
                 editBtn.setOnAction(event -> {
                     Phone p = getTableView().getItems().get(getIndex());
                     showEditDialog(p);
                 });
+
                 deleteBtn.setOnAction(event -> {
                     Phone p = getTableView().getItems().get(getIndex());
                     PhoneManager.phones.remove(p);
                     data.remove(p);
+                    filteredData.setPredicate(filteredData.getPredicate());
                     table.refresh();
                 });
-                HBox pane = new HBox(5, editBtn, deleteBtn);
-                pane.setAlignment(Pos.CENTER);
-                setGraphic(pane);
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                }
             }
         });
 
         table.getColumns().addAll(idCol, brandCol, modelCol, storageCol, priceCol, conditionCol, sellerCol, actionCol);
+
         SortedList<Phone> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(table.comparatorProperty());
         table.setItems(sortedData);
 
-
         // === Filter Form ===
         Label filterLabel = new Label("FILTER PHONES:");
         filterLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-        
+
         TextField filterBrandField = new TextField();
         filterBrandField.setPromptText("Brand");
-        
+
         TextField filterModelField = new TextField();
         filterModelField.setPromptText("Model");
-        
+
         TextField filterConditionField = new TextField();
         filterConditionField.setPromptText("New/Used");
-        
+
         TextField filterMinPriceField = new TextField();
         filterMinPriceField.setPromptText("Min Price");
-        
+
         TextField filterMaxPriceField = new TextField();
         filterMaxPriceField.setPromptText("Max Price");
-        
+
         TextField filterStorageField = new TextField();
         filterStorageField.setPromptText("Storage (GB)");
-        
+
         TextField filterSellerField = new TextField();
         filterSellerField.setPromptText("Seller Name");
 
@@ -133,7 +139,7 @@ public class PhoneStoreAppFX extends Application {
             filteredData.setPredicate(p -> true);
         });
 
-        HBox filterForm = new HBox(5, 
+        HBox filterForm = new HBox(5,
             filterBrandField, filterModelField, filterConditionField,
             filterMinPriceField, filterMaxPriceField, filterStorageField,
             filterSellerField, applyFilterBtn, clearFilterBtn
@@ -142,27 +148,30 @@ public class PhoneStoreAppFX extends Application {
         filterForm.setAlignment(Pos.CENTER);
 
         // === Add form ===
+        Label addLabel = new Label("ADD NEW PHONE:");
+        addLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
         TextField idField = new TextField();
         idField.setPromptText("ID");
-        
+
         TextField brandField = new TextField();
         brandField.setPromptText("Brand");
-        
+
         TextField modelField = new TextField();
         modelField.setPromptText("Model");
-        
+
         TextField storageField = new TextField();
         storageField.setPromptText("Storage (GB)");
-        
+
         TextField priceField = new TextField();
         priceField.setPromptText("Price");
-        
+
         TextField conditionField = new TextField();
         conditionField.setPromptText("New/Used");
-        
+
         TextField sellerNameField = new TextField();
         sellerNameField.setPromptText("Seller Name");
-        
+
         TextField sellerPhoneField = new TextField();
         sellerPhoneField.setPromptText("Seller Phone");
 
@@ -178,18 +187,19 @@ public class PhoneStoreAppFX extends Application {
                 String sellerName = sellerNameField.getText();
                 String sellerPhone = sellerPhoneField.getText();
 
-                if (brand.isEmpty() || model.isEmpty() || condition.isEmpty() || 
+                if (brand.isEmpty() || model.isEmpty() || condition.isEmpty() ||
                     sellerName.isEmpty() || sellerPhone.isEmpty()) {
                     showAlert("All fields are required!");
                     return;
                 }
 
-                Phone newPhone = new Phone(id, brand, model, storage, price, condition, 
-                                         new Seller(sellerName, sellerPhone));
+                Phone newPhone = new Phone(id, brand, model, storage, price, condition,
+                        new Seller(sellerName, sellerPhone));
                 PhoneManager.phones.add(newPhone);
                 data.add(newPhone);
+                filteredData.setPredicate(filteredData.getPredicate());
+                table.refresh();
 
-                // Clear fields
                 idField.clear();
                 brandField.clear();
                 modelField.clear();
@@ -198,12 +208,8 @@ public class PhoneStoreAppFX extends Application {
                 conditionField.clear();
                 sellerNameField.clear();
                 sellerPhoneField.clear();
-
-                table.refresh();
             } catch (NumberFormatException ex) {
-                showAlert("Invalid number format! Please check ID, Storage and Price fields.");
-            } catch (Exception ex) {
-                showAlert("Error adding phone: " + ex.getMessage());
+                showAlert("Invalid number format! Check ID, Storage, Price.");
             }
         });
 
@@ -217,86 +223,58 @@ public class PhoneStoreAppFX extends Application {
         refreshBtn.setOnAction(e -> {
             PhoneFileService.loadFromFile();
             data.setAll(PhoneManager.phones);
+            filteredData.setPredicate(filteredData.getPredicate());
             table.refresh();
         });
 
-        Label addLabel = new Label("ADD NEW PHONE:");
-        addLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-
-
-        HBox form = new HBox(5, idField, brandField, modelField, storageField,
+        HBox addForm = new HBox(5, idField, brandField, modelField, storageField,
                 priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn, refreshBtn);
-        form.setPadding(new Insets(10));
-        form.setAlignment(Pos.CENTER);
-
-        VBox addFormSection = new VBox(5, addLabel, form);
-        addFormSection.setPadding(new Insets(5));
-        addFormSection.setAlignment(Pos.CENTER);
+        addForm.setPadding(new Insets(5));
+        addForm.setAlignment(Pos.CENTER);
 
         VBox filterSection = new VBox(5, filterLabel, filterForm);
-        filterSection.setPadding(new Insets(5));
         filterSection.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(10, table, filterSection, addFormSection);
+        VBox addSection = new VBox(5, addLabel, addForm);
+        addSection.setAlignment(Pos.CENTER);
 
+        VBox root = new VBox(10, table, filterSection, addSection);
         root.setPadding(new Insets(10));
 
         primaryStage.setScene(new Scene(root, 1200, 650));
         primaryStage.show();
     }
 
-    private void applyFilters(
-        String brand, String model, String condition, 
-        String minPriceStr, String maxPriceStr, 
-        String storageStr, String sellerName) {
-        
+    private void applyFilters(String brand, String model, String condition,
+                              String minPriceStr, String maxPriceStr,
+                              String storageStr, String sellerName) {
+
         filteredData.setPredicate(phone -> {
-            // Brand filter
-            if (!brand.isEmpty() && !phone.brand.equalsIgnoreCase(brand)) {
-                return false;
-            }
-            
-            // Model filter
-            if (!model.isEmpty() && !phone.model.equalsIgnoreCase(model)) {
-                return false;
-            }
-            
-            // Condition filter
-            if (!condition.isEmpty() && !phone.condition.equalsIgnoreCase(condition)) {
-                return false;
-            }
-            
-            // Price range filter
+            if (!brand.isEmpty() && !phone.brand.equalsIgnoreCase(brand)) return false;
+            if (!model.isEmpty() && !phone.model.equalsIgnoreCase(model)) return false;
+            if (!condition.isEmpty() && !phone.condition.equalsIgnoreCase(condition)) return false;
+
             try {
                 double minPrice = minPriceStr.isEmpty() ? Double.MIN_VALUE : Double.parseDouble(minPriceStr);
                 double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(maxPriceStr);
-                if (phone.price < minPrice || phone.price > maxPrice) {
-                    return false;
-                }
+                if (phone.price < minPrice || phone.price > maxPrice) return false;
             } catch (NumberFormatException e) {
-                showAlert("Invalid price range format!");
+                showAlert("Invalid price format!");
                 return false;
             }
-            
-            // Storage filter
+
             if (!storageStr.isEmpty()) {
                 try {
                     int storage = Integer.parseInt(storageStr);
-                    if (phone.storage != storage) {
-                        return false;
-                    }
+                    if (phone.storage != storage) return false;
                 } catch (NumberFormatException e) {
                     showAlert("Invalid storage format!");
                     return false;
                 }
             }
-            
-            // Seller name filter
-            if (!sellerName.isEmpty() && !phone.seller.name.equalsIgnoreCase(sellerName)) {
-                return false;
-            }
-            
-            // If all filters pass
+
+            if (!sellerName.isEmpty() && !phone.seller.name.equalsIgnoreCase(sellerName)) return false;
+
             return true;
         });
     }
@@ -339,9 +317,10 @@ public class PhoneStoreAppFX extends Application {
                     p.condition = conditionField.getText();
                     p.seller.name = sellerNameField.getText();
                     p.seller.phone = sellerPhoneField.getText();
+                    filteredData.setPredicate(filteredData.getPredicate());
                     table.refresh();
                 } catch (NumberFormatException e) {
-                    showAlert("Invalid number format for storage or price!");
+                    showAlert("Invalid format for storage or price!");
                 }
             }
             return null;
