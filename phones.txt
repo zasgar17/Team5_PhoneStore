@@ -20,3 +20,71 @@
 20;Google;Pixel 8 Pro;128;1490.0;New;Fateh_Qulamov;0554376235
 21;Apple;Iphone 16 Pro Max;256;3850.0;New;Vaqif_Isali;0996654545
 22;Samsung;Galaxy A56;128;649.99;New;Zulfiyya_Xalidova;0513321243
+23;Apple;iPhone 11;128;450.0;Used;Laman_Rzayeva;0507778889
+24;Xiaomi;Redmi 12C;64;180.0;New;Nigar_Suleymanli;0552233445
+25;Samsung;Galaxy S21 FE;128;550.5;Used;Rauf_Najafov;0519988777
+26;Huawei;P50 Lite;128;320.0;New;Nurlan_Gurbanov;0503344556
+27;OnePlus;Nord CE 2;128;299.0;Used;Sevinc_Mammadli;0515544332
+28;Google;Pixel 5;128;380.0;Used;Murad_Aliyev;0556667778
+29;Apple;iPhone XR;64;350.0;Used;Ilham_Mustafayev;0514455667
+30;Samsung;Galaxy A34;256;410.0;New;Rana_Rahimova;0501122334
+31;POCO;F5 Pro;128;420.0;New;Orxan_Alizade;0707788996
+32;Infinix;Hot 12;64;160.0;New;Kamala_Nasibova;0516677889
+33;Xiaomi;Mi 10T;256;480.0;Used;Eldar_Ahmadov;0557788990
+34;Google;Pixel 4a;128;280.0;Used;Sabina_Safarova;0503344557
+35;Huawei;Nova 11i;128;390.0;New;Anar_Ismayilov;0702233445
+36;OnePlus;Nord N20;256;330.0;New;Aygun_Babayeva;0515566778
+37;Redmi;Note 12 Pro;128;410.0;New;Jalal_Huseynov;0519988775
+38;Apple;iPhone 13 Mini;256;750.0;New;Zehra_Mammadova;0507788991
+39;Samsung;Galaxy S23 Ultra;512;1950.0;New;Yusif_Aliyev;0553322114
+40;Google;Pixel 8a;128;800.0;New;Ulviya_Sadigova;0709988776
+41;Xiaomi;Redmi 10;64;150.0;Used;Rustam_Aliyev;0512211334
+42;Huawei;Mate Xs 2;512;2100.0;New;Shahin_Mehdiyev;0991234567
+43;OnePlus;11R;256;600.0;New;Samir_Hasanov;0514455778
+44;POCO;X5 5G;128;320.0;New;Afet_Gasimova;0506677881
+45;Infinix;Zero 30;256;350.0;New;Murad_Aliyev;0557788992
+46;Apple;iPhone SE 2022;64;420.0;New;Sevda_Imanli;0516655443
+47;Samsung;Galaxy A72;128;380.0;Used;Vusal_Huseynov;0509988774
+48;Google;Pixel 2 XL;64;150.0;Used;Kanan_Aliyev;0705544332
+49;Xiaomi;Mi 12 Lite;128;390.0;New;Zarina_Mammadova;0511122335
+50;OnePlus;Nord 3;256;490.0;New;Nijat_Safarov;0555566778
+51;Apple;iPhone 8;64;250.0;Used;Gunay_Mammadova;0503322111
+52;Samsung;Galaxy Z Flip 5;256;1800.0;New;Adil_Abbasov;0519988112
+53;Huawei;P60 Pro;512;1700.0;New;Rovshan_Imamaliyev;0707788665
+54;Google;Pixel 9;128;950.0;New;Emil_Hasanov;0996655443
+55;Xiaomi;Redmi Note 10;64;220.0;Used;Nail_Rustamov;0513344556
+56;POCO;X6 Pro;256;400.0;New;Ilkin_Alizade;0557788993
+57;Infinix;Smart 8;128;200.0;New;Lale_Suleymanova;0512233442
+58;Apple;iPhone 15;256;1450.0;New;Leyla_Abdullayeva;0506677884
+59;Samsung;Galaxy A14;64;180.0;New;Khalid_Aliyev;0517788994
+60;OnePlus;8T;256;350.0;Used;Javid_Huseynov;0703322112
+61;Google;Pixel 6;128;500.0;Used;Sabir_Imanov;0516655448
+62;Xiaomi;Mi 13;256;750.0;New;Elmira_Guliyeva;0507788995
+63;Huawei;Nova 9 SE;128;340.0;New;Murad_Aliyev;0513344559
+64;Redmi;Note 13;128;320.0;New;Aysel_Ismayilova;0702233449
+65;Apple;iPhone 12 Mini;64;520.0;Used;Nigar_Alizada;0502233447
+66;Samsung;Galaxy S20;128;450.0;Used;Vugar_Mahmudov;0517788997
+67;Google;Pixel 7 Pro;256;980.0;New;Sevil_Hasanli;0556655442
+68;Xiaomi;Redmi A1;32;120.0;New;Kamal_Imanov;0513322118
+69;Huawei;Y9s;128;250.0;Used;Nermin_Abbasova;0507788998
+70;OnePlus;7T;128;300.0;Used;Rashid_Huseynov;0517788999
+71;POCO;M6 Pro;64;250.0;New;Emil_Suleymanov;0703344559
+72;Infinix;Hot 30i;128;210.0;New;Ulker_Nuruzade;0514455669
+73;Apple;iPhone 13;128;950.0;New;Ilhama_Mammadova;0506677886
+74;Samsung;Galaxy M54;256;480.0;New;Adnan_Rzayev;0517788990
+75;Google;Pixel 4;64;200.0;Used;Murad_Guliyev;0557788991
+76;Xiaomi;Redmi 9A;32;100.0;Used;Ayan_Ismayilova;0512233447
+77;Huawei;Y7 Prime;64;180.0;Used;Kamran_Suleymanov;0701122334
+78;OnePlus;5T;128;250.0;Used;Narmin_Huseynli;0513322110
+79;POCO;C51;64;150.0;New;Rovshan_Aliyev;0506677887
+80;Infinix;Smart 7 Plus;128;200.0;New;Lalə_Guliyeva;0515566770
+81;Apple;iPhone X;64;300.0;Used;Nigar_Abbasova;0507788993
+82;Samsung;Galaxy Note 10;256;600.0;Used;Farid_Suleymanov;0517788992
+83;Google;Pixel 3 XL;128;250.0;Used;Rena_Mammadova;0557788994
+84;Xiaomi;Mi 9T;128;280.0;Used;Nijat_Guliyev;0513344558
+85;Huawei;P40 Lite;128;320.0;Used;Kamila_Rzayeva;0517788991
+86;OnePlus;6;128;240.0;Used;Ziya_Ismayilov;0514455665
+87;POCO;M4 Pro;128;300.0;New;Ilgar_Mustafayev;0507788990
+88;Infinix;Note 11 Pro;128;250.0;New;Sabina_Najafova;0513344555
+89;Apple;iPhone 15 Pro Max;512;3800.0;New;Ulvi_Isgandarov;0999988777
+90;Samsung;Galaxy S25;512;4000.0;New;Ayan_Aliyeva;0998877665
