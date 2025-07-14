@@ -51,8 +51,13 @@ public class PhoneSearchService {
             Phone p = iterator.next();
             System.out.println("\n" + p);
 
-            System.out.print("Choose: (E)dit / (D)elete / (S)kip: ");
+            System.out.print("Choose: (E)dit / (D)elete / (S)kip / (-2 to finalize search): ");
             String action = sc.nextLine().trim().toLowerCase();
+
+            if (action.equals("-2")) {
+                System.out.println("Search finalized by user.");
+                break;
+            }
 
             switch (action) {
                 case "e" -> PhoneManager.editPhone(sc, p);
