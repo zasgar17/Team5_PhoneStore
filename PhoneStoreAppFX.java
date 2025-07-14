@@ -52,6 +52,11 @@ public class PhoneStoreAppFX extends Application {
             cellData.getValue().seller.name + " (" + cellData.getValue().seller.phone + ")"
         ));
 
+
+         TextField globalSearchField = new TextField();
+        globalSearchField.setPromptText("Search all fields...");
+        globalSearchField.setMaxWidth(200);  // Optional: limit the width
+        
         // === Actions column ===
         TableColumn<Phone, Void> actionCol = new TableColumn<>("Actions");
         actionCol.setCellFactory(param -> new TableCell<>() {
@@ -105,7 +110,30 @@ public class PhoneStoreAppFX extends Application {
         filteredData.predicateProperty().addListener((obs, oldPred, newPred) -> 
             countLabel.setText("Total Phones: " + filteredData.size()));
 
-        HBox tableHeader = new HBox(countLabel);
+            globalSearchField.textProperty().addListener((obs, oldValue, newValue) -> {
+    String lowerCaseFilter = newValue.toLowerCase();
+
+    filteredData.setPredicate(phone -> {
+        if (newValue == null || newValue.isEmpty()) return true;
+
+        return (String.valueOf(phone.id).contains(lowerCaseFilter) ||
+                phone.brand.toLowerCase().contains(lowerCaseFilter) ||
+                phone.model.toLowerCase().contains(lowerCaseFilter) ||
+                phone.condition.toLowerCase().contains(lowerCaseFilter) ||
+                String.valueOf(phone.storage).contains(lowerCaseFilter) ||
+                String.valueOf(phone.price).contains(lowerCaseFilter) ||
+                phone.seller.name.toLowerCase().contains(lowerCaseFilter) ||
+                phone.seller.phone.toLowerCase().contains(lowerCaseFilter));
+    });
+});
+
+
+       
+
+        HBox tableHeader = new HBox(10, countLabel, globalSearchField);
+        tableHeader.setPadding(new Insets(0, 10, 5, 10));
+        tableHeader.setAlignment(Pos.CENTER_RIGHT);
+
         tableHeader.setPadding(new Insets(0, 10, 5, 10));
         tableHeader.setAlignment(Pos.CENTER_RIGHT);
 
