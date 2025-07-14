@@ -3,16 +3,16 @@
         "."
     ],
     "java.project.referencedLibraries": [
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx-swt.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.base.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.controls.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.fxml.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.graphics.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.media.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.swing.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/javafx.web.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/jdk.jsobject.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/jfx.incubator.input.jar",
-        "/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib/jfx.incubator.richtext.jar"
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx-swt.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.base.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.controls.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.fxml.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.graphics.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.media.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.swing.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/javafx.web.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/jdk.jsobject.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/jfx.incubator.input.jar",
+        "/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib/jfx.incubator.richtext.jar"
     ]
 }
