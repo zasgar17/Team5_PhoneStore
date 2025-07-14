@@ -21,10 +21,10 @@
             "request": "launch",
             "mainClass": "PhoneStoreAppFX",
 
-            // "vmArgs": "--module-path \"/Users/leylaaliyeva/Downloads/javafx-sdk-24.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
-            "vmArgs": "--module-path /Users/User/Desktop/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml"
+            // "vmArgs": "--module-path \"/Users/leylaaliyeva/Downloads/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+            // "vmArgs": "--module-path /Users/User/Downloads/openjfx-21.0.7_windows-x64_bin-sdk/javafx-sdk-21.0.7/lib --add-modules javafx.controls,javafx.fxml"
 
-            // "vmArgs": "--module-path \"/Users/user/OneDrive/Desktop/javafx-sdk-24.0.1/lib\" --add-modules javafx.controls,javafx.fxml"
+            // "vmArgs": "--module-path \"/Users/user/OneDrive/Desktop/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
 
         }
     ]
