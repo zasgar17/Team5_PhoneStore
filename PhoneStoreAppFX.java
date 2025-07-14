@@ -174,8 +174,22 @@ public class PhoneStoreAppFX extends Application {
         // TextField idField = new TextField();
         // idField.setPromptText("ID");
 
-        TextField brandField = new TextField();
-        brandField.setPromptText("Brand");
+        ComboBox<String> brandComboBox = new ComboBox<>();
+brandComboBox.setEditable(true);  // allows custom input
+brandComboBox.setPromptText("Brand");
+
+        // Extract unique brand names from data
+        ObservableList<String> brandOptions = FXCollections.observableArrayList();
+        data.stream()
+            .map(phone -> phone.brand)
+            .distinct()
+            .forEach(brand -> {
+                if (!brandOptions.contains(brand)) {
+                    brandOptions.add(brand);
+                }
+        });
+        brandComboBox.setItems(brandOptions);
+
 
         TextField modelField = new TextField();
         modelField.setPromptText("Model");
@@ -200,7 +214,7 @@ public class PhoneStoreAppFX extends Application {
             try {
                 //int id = Integer.parseInt(idField.getText());
                 int id = generateNextId();
-                String brand = brandField.getText();
+                String brand = brandComboBox.getEditor().getText();
                 String model = modelField.getText();
                 int storage = Integer.parseInt(storageField.getText());
                 double price = Double.parseDouble(priceField.getText());
@@ -221,8 +235,13 @@ public class PhoneStoreAppFX extends Application {
                 filteredData.setPredicate(filteredData.getPredicate());
                 table.refresh();
 
+                if (!brandOptions.contains(brand)) {
+                    brandOptions.add(brand);
+}
+
+
                 //idField.clear();
-                brandField.clear();
+                brandComboBox.getEditor().clear();
                 modelField.clear();
                 storageField.clear();
                 priceField.clear();
@@ -250,7 +269,7 @@ public class PhoneStoreAppFX extends Application {
 
         // HBox addForm = new HBox(5, idField, brandField, modelField, storageField,
         //         priceField, conditionField, sellerNameField, sellerPhoneField, addBtn, saveBtn, refreshBtn);
-        HBox addForm = new HBox(5, brandField, modelField, storageField,
+        HBox addForm = new HBox(5, brandComboBox, modelField, storageField,
     priceField, conditionField, sellerNameField, sellerPhoneField,
     addBtn, saveBtn, refreshBtn);
 
